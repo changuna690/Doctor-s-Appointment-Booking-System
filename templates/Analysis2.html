@@ -1,0 +1,102 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis 2</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-around;">
+        <div>
+            <h2>Number of Appointments by Patient</h2>
+            <canvas id="myChart1" width="400" height="400"></canvas>
+            <script>
+                var ctx1 = document.getElementById('myChart1').getContext('2d');
+                var myChart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ labels | tojson }},
+                        datasets: [{
+                            label: 'Number of Appointments',
+                            data: {{ data | tojson }},
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+        <div>
+            <h2>Number of Appointments by Appointment Datetime</h2>
+            <canvas id="myChart2" width="400" height="400"></canvas>
+            <script>
+                var ctx2 = document.getElementById('myChart2').getContext('2d');
+                var myChart2 = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ datetime_labels | tojson }},
+                        datasets: [{
+                            label: 'Number of Appointments',
+                            data: {{ datetime_data | tojson }},
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+    <div>
+        <script>
+            var graphData = {{ graph_data | tojson }};
+        
+            var doctorLabels = graphData.doctor_labels;
+            var dateLabels = graphData.date_labels;
+            var appointmentData = graphData.appointment_data;
+        
+            var traceData = [];
+            doctorLabels.forEach(function(doctor) {
+              var counts = [];
+              dateLabels.forEach(function(date) {
+                counts.push(appointmentData[date][doctor] || 0);
+              });
+              var trace = {
+                x: dateLabels,
+                y: counts,
+                type: 'bar',
+                name: doctor
+              };
+              traceData.push(trace);
+            });
+        
+            var layout = {
+              barmode: 'group',
+              title: 'Appointments by Doctor and Date',
+              xaxis: { title: 'Date' },
+              yaxis: { title: 'Number of Appointments' }
+              
+            };
+        
+            Plotly.newPlot('graph', traceData, layout);
+          </script>
+    </div>
+    
+    </div>
+</body>
+</html>

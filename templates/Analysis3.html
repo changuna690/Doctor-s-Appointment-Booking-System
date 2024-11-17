@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+  <div id="graph"></div>
+
+  <script>
+    var graphData = {{ graph_data | tojson }};
+
+    var doctorLabels = graphData.doctor_labels;
+    var dateLabels = graphData.date_labels;
+    var appointmentData = graphData.appointment_data;
+
+    var traceData = [];
+    doctorLabels.forEach(function(doctor) {
+      var counts = [];
+      dateLabels.forEach(function(date) {
+        counts.push(appointmentData[date][doctor] || 0);
+      });
+      var trace = {
+        x: dateLabels,
+        y: counts,
+        type: 'bar',
+        name: doctor
+      };
+      traceData.push(trace);
+    });
+
+    var layout = {
+      barmode: 'group',
+      title: 'Appointments by Doctor and Date',
+      xaxis: { title: 'Date' },
+      yaxis: { title: 'Number of Appointments' }
+    };
+
+    Plotly.newPlot('graph', traceData, layout);
+  </script>
+</body>
+</html>

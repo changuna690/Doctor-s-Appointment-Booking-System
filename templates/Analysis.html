@@ -1,0 +1,109 @@
+<!---- <!DOCTYPE html>
+<html>
+<head>
+	<title>Slide Navbar</title>
+	<link rel="stylesheet" type="text/css" href="static/login.css">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+	 <div class="main">  	
+		<input type="checkbox" id="chk" aria-hidden="true">
+
+			<h4>
+				Data Analysis
+			</h4>
+	</div> 
+</body>
+</html>  -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-around;">
+        <div>
+            <h2>Appointments by Doctor</h2>
+            <canvas id="myChart1" width="400" height="400"></canvas>
+            <script>
+                var ctx1 = document.getElementById('myChart1').getContext('2d');
+                var myChart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ doctor_labels | tojson }},
+                        datasets: [{
+                            label: 'Appointments by Doctor',
+                            data: {{ doctor_data | tojson }},
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Appointments'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Doctors'
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+        <div>
+            <h2>Blood Groups of Patients</h2>
+            <canvas id="myChart2" width="400" height="400"></canvas>
+            <script>
+                var ctx2 = document.getElementById('myChart2').getContext('2d');
+                var myChart2 = new Chart(ctx2, {
+                    type: 'pie',
+                    data: {
+                        labels: {{ bloodgroup_labels | tojson }},
+                        datasets: [{
+                            label: 'Blood Groups of Patients',
+                            data: {{ bloodgroup_data | tojson }},
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(255, 159, 64, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: false, // Disable responsiveness
+                        maintainAspectRatio: false
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html>
